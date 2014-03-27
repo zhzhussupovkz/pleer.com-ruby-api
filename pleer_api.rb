@@ -38,6 +38,8 @@ class PleerApi
     @token_url = 'http://api.pleer.com/token.php'
     @api_url = 'http://api.pleer.com/index.php'
     @access_token = {}
+    @exp = Time.now.to_i
+    get_acces_token
   end
   
   def get_acces_token
@@ -61,7 +63,11 @@ class PleerApi
 
   def send_request method, params = {}
     uri = URI.parse(@api_url)
-    required = {'access_token' => @access_token }
+    if Time.now.to_i > @exp + 3600
+      get_acces_token
+      @exp = Time.now.to_i
+    end
+    required = { 'access_token' => @access_token, 'method' => method }
     params = required.merge(params)
     params = URI.escape(params.collect{ |k,v| "#{k}=#{v}"}.join('&'))
     http = Net::HTTP.new(uri.host, uri.port)
@@ -76,5 +82,60 @@ class PleerApi
       exit
     end
   end
-  
+
+  #search track by search term
+  def tracks_search params = { :query => 'love', :page => 1 }
+    json = send_request 'tracks_search', params
+    if json['success'] == true
+      json['tracks']
+    else
+      puts "Error: " + json['message']
+      exit
+    end
+  end
+
+  #get info about track
+  def tracks_get_info params = { :track_id => nil }
+    json = send_request 'tracks_get_info', params
+    if json['success'] == true
+      json['data']
+    else
+      puts "Error: " + json['message']
+      exit
+    end
+  end
+
+  #get track's lyrics
+  def tracks_get_lyrics params = { :track_id => nil }
+    json = send_request 'tracks_get_lyrics', params
+    if json['success'] == true
+      json['text']
+    else
+      puts "Error: " + json['message']
+      exit
+    end
+  end
+
+  #get download link for track
+  def tracks_get_download_link params = { :track_id => nil, :reason => 'save' }
+    json = send_request 'tracks_get_download_link', params
+    if json['success'] == true
+      json['url']
+    else
+      puts "Error: " + json['message']
+      exit
+    end
+  end
+
+  #get top tracks for period
+  def get_top_list params = { :list_type => 1, :page => 1, :language => 'en' }
+    json = send_request 'get_top_list', params
+    if json['success'] == true
+      json['tracks']
+    else
+      puts "Error: " + json['message']
+      exit
+    end
+  end
+
 end
