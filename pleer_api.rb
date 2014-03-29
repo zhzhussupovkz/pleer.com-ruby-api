@@ -27,9 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 require 'net/http'
 require 'base64'
-require 'openssl'
 require 'json'
-require 'open-uri'
 
 class PleerApi
 

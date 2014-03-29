@@ -29,6 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 =end
 
 require 'optparse'
+require 'open-uri'
 require_relative 'pleer_api'
 
 options = {}
