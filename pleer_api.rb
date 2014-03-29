@@ -39,7 +39,8 @@ class PleerApi
     @exp = Time.now.to_i
     get_acces_token
   end
-  
+
+  #get access token for api requests
   def get_acces_token
     uri = URI.parse(@token_url)
     http = Net::HTTP.new(uri.host, uri.port)
@@ -59,6 +60,7 @@ class PleerApi
     end
   end
 
+  #send request to the server
   def send_request method, params = {}
     uri = URI.parse(@api_url)
     if Time.now.to_i > @exp + 3600
