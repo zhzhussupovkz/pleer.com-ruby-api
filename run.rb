@@ -91,6 +91,7 @@ all.each do |id|
     begin
       url = pleer.tracks_get_download_link params = { :track_id => id, :reason => 'save' }
       filename = File.basename url
+      filename = query.gsub(' ', '_') + '_' + filename.gsub('/.mp3/', "#{id}.mp3")
       open(url, 'rb') do |track|
         File.new("#{path}/#{filename}", 'wb').write(track.read)
         puts "Music file '" + filename + "': OK" 
