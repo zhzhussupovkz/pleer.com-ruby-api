@@ -80,6 +80,10 @@ threads = []
 t1 = Time.now
 tracks = pleer.tracks_search options
 query = options[:query]
+if tracks.length == 0
+  puts "Not found music files for search query: #{query}"
+  exit
+end
 puts "Found " + tracks.length.to_s + " music files for search query: #{query}."
 all = []
 tracks.each_with_index do |e, i|
