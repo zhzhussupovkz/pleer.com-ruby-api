@@ -37,11 +37,11 @@ class PleerApi
     @api_url = 'http://api.pleer.com/index.php'
     @access_token = {}
     @exp = Time.now.to_i
-    get_acces_token
+    get_access_token
   end
 
   #get access token for api requests
-  def get_acces_token
+  def get_access_token
     uri = URI.parse(@token_url)
     http = Net::HTTP.new(uri.host, uri.port)
     req = Net::HTTP::Post.new(uri.request_uri)
@@ -72,6 +72,7 @@ class PleerApi
     params = URI.escape(params.collect{ |k,v| "#{k}=#{v}"}.join('&'))
     http = Net::HTTP.new(uri.host, uri.port)
     req = Net::HTTP::Post.new(uri.request_uri)
+    req['User-Agent'] = "zhzhussupovkz pleer.com-ruby-api"
     req.body = params
     res = http.request(req)
     if res.code == "200"
